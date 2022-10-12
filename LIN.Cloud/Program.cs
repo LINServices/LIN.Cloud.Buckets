@@ -1,16 +1,16 @@
-global using LIN.Types.Communication.Models;
 global using Microsoft.EntityFrameworkCore;
-global using LIN.Communication;
+global using LIN.Cloud;
 global using LIN.Types.Enumerations;
 global using LIN.Types.Responses;
 global using LIN.Modules;
 global using Microsoft.AspNetCore.Mvc;
 global using LIN.Types.Auth.Abstracts;
-global using LIN.Communication.Services;
+global using LIN.Cloud.Services;
 global using Http.ResponsesList;
 global using Microsoft.AspNetCore.SignalR;
 global using LIN.Types.Auth.Enumerations;
-using LIN.Communication.Data;
+global using LIN.Types.Cloud.Models;
+
 using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,17 +38,17 @@ builder.Services.AddCors(options =>
         });
 });
 
-Conexión.SetStringConnection(sqlConnection);
+//Conexión.SetStringConnection(sqlConnection);
 
 
-if (sqlConnection.Length > 0)
-{
-    // SQL Server
-    builder.Services.AddDbContext<Context>(options =>
-    {
-        options.UseSqlServer(sqlConnection);
-    });
-}
+//if (sqlConnection.Length > 0)
+//{
+//    // SQL Server
+//    builder.Services.AddDbContext<Context>(options =>
+//    {
+//        options.UseSqlServer(sqlConnection);
+//    });
+//}
 
 
 var app = builder.Build();
@@ -62,23 +62,24 @@ app.UseCors("AllowAnyOrigin");
 
 
 
-try
-{
-    // Si la base de datos no existe
-    using var scope = app.Services.CreateScope();
-    var dataContext = scope.ServiceProvider.GetRequiredService<Context>();
-    var res = dataContext.Database.EnsureCreated();
-}
-catch
-{ }
+//try
+//{
+//    // Si la base de datos no existe
+//    using var scope = app.Services.CreateScope();
+//    var dataContext = scope.ServiceProvider.GetRequiredService<Context>();
+//    var res = dataContext.Database.EnsureCreated();
+//}
+//catch
+//{ }
 
-Jwt.Open();
+//Jwt.Open();
+LIN.Cloud.Services.FileConst.Path = "C:\\Users\\giral\\Desktop\\DATA";
 
 
 app.UseHttpsRedirection();
 
 
-app.MapHub<LIN.Communication.Hubs.ChatHub>("/chat");
+//app.MapHub<ChatHub>("/chat");
 app.UseAuthorization();
 
 app.MapControllers();

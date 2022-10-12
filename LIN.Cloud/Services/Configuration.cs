@@ -1,4 +1,4 @@
-﻿namespace LIN.Communication.Services;
+﻿namespace LIN.Cloud.Services;
 
 
 public class Configuration
