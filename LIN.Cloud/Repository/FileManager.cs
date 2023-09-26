@@ -96,17 +96,41 @@ public class FileManager
 
 
 
+    public byte[] Get(string file)
+    {
+        try
+        {
+            var folderRoute = Path.Combine(UserPath, file);
+
+
+            if (!File.Exists(folderRoute))
+            {
+                return Array.Empty<byte>();
+            }
+
+            var data = File.ReadAllBytes(folderRoute);
+
+            return data;
+        }
+        catch
+        {
+            return Array.Empty<byte>();
+        }
+    }
+
+
+
 
     public StorageMap GetMap()
     {
         try
         {
 
-            StorageMap map = new ();
+            StorageMap map = new();
             map.Folder = new();
 
 
-             BuildDirectory(map.Folder, new string[] { UserPath });
+            BuildDirectory(map.Folder, new string[] { UserPath + "/storage" });
 
             return map;
         }
@@ -153,7 +177,7 @@ public class FileManager
             BuildDirectory(newFolder, GetFolders(directory));
             BuildFiles(newFolder, GetFiles(directory));
 
-            folder.Folders.Add(newFolder);  
+            folder.Folders.Add(newFolder);
 
         }
     }

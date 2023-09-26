@@ -76,7 +76,7 @@ public class FileController : ControllerBase
 
 
     [HttpGet("map")]
-    public async Task<HttpReadOneResponse<StorageMap>> GETMap([FromHeader] int user)
+    public async Task<HttpReadOneResponse<StorageMap>> GetMap([FromHeader] int user)
     {
 
         
@@ -93,6 +93,34 @@ public class FileController : ControllerBase
         {
             Response = Responses.Success,
             Model = result
+        };
+
+
+    }
+
+
+
+    [HttpGet("file")]
+    public async Task<HttpReadOneResponse<FileModel>> GetMap([FromQuery] string route, [FromHeader] int user)
+    {
+
+
+        // File manager
+        Repository.FileManager fileManager = new(user.ToString());
+
+        // Validación de creación
+        fileManager.EnsureCreated();
+
+        // Crear el archivo
+        var result = fileManager.Get(route);
+
+        return new ReadOneResponse<FileModel>()
+        {
+            Response = Responses.Success,
+            Model = new()
+            {
+                Data = result,
+            }
         };
 
 
