@@ -130,7 +130,7 @@ public class FileManager
             map.Folder = new();
 
 
-            BuildDirectory(map.Folder, new string[] { UserPath + "/storage" });
+            BuildDirectory(map, map.Folder, new string[] { UserPath + "/storage" });
 
             return map;
         }
@@ -158,7 +158,7 @@ public class FileManager
 
 
 
-    private void BuildDirectory(Folder folder, string[] directories)
+    private void BuildDirectory(StorageMap map, Folder folder, string[] directories)
     {
 
 
@@ -174,25 +174,28 @@ public class FileManager
 
 
 
-            BuildDirectory(newFolder, GetFolders(directory));
-            BuildFiles(newFolder, GetFiles(directory));
+            BuildDirectory(map, newFolder, GetFolders(directory));
+            BuildFiles(map,newFolder, GetFiles(directory));
 
             folder.Folders.Add(newFolder);
 
         }
     }
 
-    private void BuildFiles(Folder folder, string[] files)
+    private void BuildFiles(StorageMap map, Folder folder, string[] files)
     {
 
         foreach (string file in files)
         {
             FileInfo fileInfo = new FileInfo(file);
+            decimal size = fileInfo.Length / (decimal)(1024.0 * 1024.0);
             folder.Files.Add(new()
             {
                 Name = fileInfo.Name,
-                SizeMB = fileInfo.Length / (decimal)(1024.0 * 1024.0)
+                SizeMB = size
             });
+            map.Size += size;
+
         }
 
     }
