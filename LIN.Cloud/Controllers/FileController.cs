@@ -117,10 +117,7 @@ public class FileController : ControllerBase
         return new ReadOneResponse<FileModel>()
         {
             Response = Responses.Success,
-            Model = new()
-            {
-                Data = result,
-            }
+            Model = result
         };
 
 

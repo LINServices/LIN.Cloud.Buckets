@@ -1,4 +1,6 @@
-﻿namespace LIN.Cloud.Repository;
+﻿using LIN.Types.Cloud.Models;
+
+namespace LIN.Cloud.Repository;
 
 
 public class FileManager
@@ -96,7 +98,7 @@ public class FileManager
 
 
 
-    public byte[] Get(string file)
+    public FileModel Get(string file)
     {
         try
         {
@@ -105,16 +107,26 @@ public class FileManager
 
             if (!File.Exists(folderRoute))
             {
-                return Array.Empty<byte>();
+                return new();
             }
+
+
+            FileInfo fileInfo = new FileInfo(folderRoute);
+            decimal size = fileInfo.Length / (decimal)(1024.0 * 1024.0);
+           
+
 
             var data = File.ReadAllBytes(folderRoute);
 
-            return data;
+            return new()
+            {
+                Data = data,
+                Name = fileInfo.Name
+            };
         }
         catch
         {
-            return Array.Empty<byte>();
+            return new();
         }
     }
 
