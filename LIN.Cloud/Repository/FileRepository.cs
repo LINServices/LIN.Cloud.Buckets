@@ -1,14 +1,15 @@
-﻿using LIN.Cloud.Repository.Abstractions;
+﻿namespace LIN.Cloud.Repository;
 
-namespace LIN.Cloud.Repository;
-
-public class FileManager(BucketService bucketService) : IFileRepository
+public class FileRepository(BucketService bucketService) : IFileRepository
 {
+
+    /// <summary>
+    /// Guardar archivo.
+    /// </summary>
     public async Task<bool> Save(IFormFile data)
     {
         try
         {
-
             // Guardar el archivo.
             bool saveResult = await bucketService.Save(data);
 
@@ -21,14 +22,15 @@ public class FileManager(BucketService bucketService) : IFileRepository
     }
 
 
-
+    /// <summary>
+    /// Obtener archivo.
+    /// </summary>
+    /// <param name="file">Archivo.</param>
     public FileModel? Get(string file)
     {
         try
         {
-
-           var fileData =  bucketService.Get(file);
-
+            var fileData = bucketService.Get(file);
             return fileData;
         }
         catch
@@ -38,18 +40,20 @@ public class FileManager(BucketService bucketService) : IFileRepository
     }
 
 
-
-
+    /// <summary>
+    /// Obtener el mapa de carpetas.
+    /// </summary>
     public StorageMap GetMap()
     {
         try
         {
 
-            StorageMap map = new();
-            map.Folder = new();
+            StorageMap map = new()
+            {
+                Folder = new()
+            };
 
-
-            BuildDirectory(map, map.Folder, new string[] {bucketService.Path });
+            BuildDirectory(map, map.Folder, [bucketService.Path]);
 
             return map;
         }
@@ -94,7 +98,7 @@ public class FileManager(BucketService bucketService) : IFileRepository
 
 
             BuildDirectory(map, newFolder, GetFolders(directory));
-            BuildFiles(map,newFolder, GetFiles(directory));
+            BuildFiles(map, newFolder, GetFiles(directory));
 
             folder.Folders.Add(newFolder);
 

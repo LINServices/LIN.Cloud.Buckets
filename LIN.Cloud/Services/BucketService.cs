@@ -18,7 +18,7 @@ public class BucketService
         var httpContext = accessor.HttpContext;
 
         // Obtiene el valor.
-        bool can = httpContext.Request.Query.TryGetValue("key", out Microsoft.Extensions.Primitives.StringValues value);
+        bool can = httpContext!.Request.Query.TryGetValue("key", out Microsoft.Extensions.Primitives.StringValues value);
 
         // Información del token.
         bool findBucket = true;
@@ -26,13 +26,11 @@ public class BucketService
         // Error de autenticación.
         if (!can || !findBucket)
         {
-
         }
 
         Bucket = 1;
         SetData();
     }
-
 
 
     /// <summary>

@@ -4,6 +4,7 @@ global using LIN.Types.Cloud.Models;
 global using LIN.Types.Responses;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.StaticFiles;
+global using LIN.Cloud.Repository.Abstractions;
 using Http.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 
 // Servicios.
-builder.Services.AddScoped<LIN.Cloud.Repository.Abstractions.IFileRepository, LIN.Cloud.Repository.FileManager>();
+builder.Services.AddScoped<LIN.Cloud.Repository.Abstractions.IFileRepository, LIN.Cloud.Repository.FileRepository>();
 builder.Services.AddScoped<BucketService, BucketService>();
 
 // Build.

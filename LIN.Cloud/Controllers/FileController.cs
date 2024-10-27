@@ -1,10 +1,7 @@
-using LIN.Cloud.Repository;
-using LIN.Cloud.Repository.Abstractions;
-
 namespace LIN.Cloud.Controllers;
 
 [Route("[controller]")]
-public class FileController(IFileRepository fileManager, BucketService service) : ControllerBase
+public class FileController(IFileRepository fileManager) : ControllerBase
 {
 
 
