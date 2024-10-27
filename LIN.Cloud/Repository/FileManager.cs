@@ -1,92 +1,16 @@
-﻿using LIN.Types.Cloud.Models;
+﻿using LIN.Cloud.Repository.Abstractions;
 
 namespace LIN.Cloud.Repository;
 
-
-public class FileManager
+public class FileManager(BucketService bucketService) : IFileRepository
 {
-
-    /// <summary>
-    /// Usuario
-    /// </summary>
-    private string User { get; set; }
-
-
-
-    /// <summary>
-    /// Ruta de la carpeta del usuario
-    /// </summary>
-    private string UserPath { get; set; }
-
-
-
-    /// <summary>
-    /// Iniciar instancia del file manager
-    /// </summary>
-    /// <param name="user">Usuario</param>
-    public FileManager(string user)
-    {
-        this.User = user;
-        UserPath = Path.Combine(FileConst.Path, User);
-    }
-
-
-
-
-    /// <summary>
-    /// Asegura de tener las carpetas creadas
-    /// </summary>
-    public bool EnsureCreated()
+    public async Task<bool> Save(IFormFile data)
     {
         try
         {
-            // Si no existe carpeta del usuario
-            if (!Directory.Exists(UserPath))
-                Directory.CreateDirectory(UserPath);
 
-            // Carpetas necesarias
-            string[] baseFolders = { "storage" };
-
-            // Crear la carpetas si no existen
-            foreach (var folder in baseFolders)
-            {
-                string dataRoute = Path.Combine(UserPath, folder);
-                if (!Directory.Exists(dataRoute))
-                    Directory.CreateDirectory(dataRoute);
-            }
-
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-
-    }
-
-
-
-    /// <summary>
-    /// Guarda un archivo en el storage
-    /// </summary>
-    /// <param name="data">Elemento a guardar</param>
-    /// <param name="subFolder">Folder de storage donde se guardara</param>
-    /// <param name="fileName">Nombre del archivo</param>
-    public bool Save(byte[] data, string subFolder, string fileName)
-    {
-        try
-        {
-            var folderRoute = Path.Combine(UserPath, "storage", subFolder);
-            Directory.CreateDirectory(folderRoute);
-
-            var fileRoute = Path.Combine(folderRoute, fileName);
-
-            if (File.Exists(fileRoute))
-            {
-                return false;
-            }
-
-            File.WriteAllBytes(fileRoute, data);
+            // Guardar el archivo.
+            bool saveResult = await bucketService.Save(data);
 
             return true;
         }
@@ -98,31 +22,14 @@ public class FileManager
 
 
 
-    public FileModel Get(string file)
+    public FileModel? Get(string file)
     {
         try
         {
-            var folderRoute = Path.Combine(UserPath, file);
 
+           var fileData =  bucketService.Get(file);
 
-            if (!File.Exists(folderRoute))
-            {
-                return new();
-            }
-
-
-            FileInfo fileInfo = new FileInfo(folderRoute);
-            decimal size = fileInfo.Length / (decimal)(1024.0 * 1024.0);
-           
-
-
-            var data = File.ReadAllBytes(folderRoute);
-
-            return new()
-            {
-                Data = data,
-                Name = fileInfo.Name
-            };
+            return fileData;
         }
         catch
         {
@@ -142,7 +49,7 @@ public class FileManager
             map.Folder = new();
 
 
-            BuildDirectory(map, map.Folder, new string[] { UserPath + "/storage" });
+            BuildDirectory(map, map.Folder, new string[] {bucketService.Path });
 
             return map;
         }
@@ -211,5 +118,7 @@ public class FileManager
         }
 
     }
+
+
 
 }

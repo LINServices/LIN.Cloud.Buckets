@@ -1,17 +1,15 @@
+using LIN.Cloud.Repository;
+using LIN.Cloud.Repository.Abstractions;
+
 namespace LIN.Cloud.Controllers;
 
-
-[Route("file")]
-public class FileController : ControllerBase
+[Route("[controller]")]
+public class FileController(IFileRepository fileManager, BucketService service) : ControllerBase
 {
 
 
-    /// <summary>
-    /// Crea una nueva conversación.
-    /// </summary>
-    /// <param name="modelo">Modelo</param>
-    [HttpPost("create")]    
-    public async Task<HttpCreateResponse> Create([FromBody] FileModel modelo, [FromHeader] int user)
+    [HttpPost("create")]
+    public async Task<HttpCreateResponse> Create(IFormFile modelo)
     {
 
         // Modelo es null
@@ -26,7 +24,8 @@ public class FileController : ControllerBase
 
 
         // Obtiene el tamaño en disco
-        long sizeInBytes = modelo.Data.Length;
+        long sizeInBytes = modelo.Length;
+
         decimal sizeInMB = (decimal)sizeInBytes / (decimal)(1024 * 1024);
 
 
@@ -41,14 +40,8 @@ public class FileController : ControllerBase
         //}
 
 
-        // File manager
-        Repository.FileManager fileManager = new(user.ToString());
-
-        // Validación de creación
-        fileManager.EnsureCreated();
-
         // Crear el archivo
-        var result = fileManager.Save(modelo.Data, modelo.Route, modelo.Name);
+        var result = await fileManager.Save(modelo);
 
         // Si no se pudo crear
         if (!result)
@@ -76,15 +69,8 @@ public class FileController : ControllerBase
 
 
     [HttpGet("map")]
-    public async Task<HttpReadOneResponse<StorageMap>> GetMap([FromHeader] int user)
+    public async Task<HttpReadOneResponse<StorageMap>> GetMap()
     {
-
-        
-        // File manager
-        Repository.FileManager fileManager = new(user.ToString());
-
-        // Validación de creación
-        fileManager.EnsureCreated();
 
         // Crear el archivo
         var result = fileManager.GetMap();
@@ -101,15 +87,8 @@ public class FileController : ControllerBase
 
 
     [HttpGet("file")]
-    public async Task<HttpReadOneResponse<FileModel>> GetMap([FromQuery] string route, [FromHeader] int user)
+    public async Task<HttpReadOneResponse<FileModel>> GetMap([FromQuery] string route)
     {
-
-
-        // File manager
-        Repository.FileManager fileManager = new(user.ToString());
-
-        // Validación de creación
-        fileManager.EnsureCreated();
 
         // Crear el archivo
         var result = fileManager.Get(route);
@@ -120,6 +99,18 @@ public class FileController : ControllerBase
             Model = result
         };
 
+
+    }
+
+
+    [HttpGet]
+    public async Task<IActionResult> k([FromQuery] string route)
+    {
+
+        // Crear el archivo
+        var result = fileManager.Get(route);
+
+        return File(result.Data, result.MimeType, result.Name);
 
     }
 
