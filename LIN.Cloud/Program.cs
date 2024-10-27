@@ -15,7 +15,7 @@ builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 
 // Servicios.
-builder.Services.AddScoped<LIN.Cloud.Repository.Abstractions.IFileRepository, LIN.Cloud.Repository.FileRepository>();
+builder.Services.AddScoped<IFileRepository, LIN.Cloud.Repository.FileRepository>();
 builder.Services.AddScoped<BucketService, BucketService>();
 
 // Build.
@@ -25,5 +25,7 @@ var app = builder.Build();
 app.UseLINHttp();
 app.UseAuthorization();
 app.MapControllers();
+
+BucketService.Default = "C:/Data/Cloud";
 
 app.Run();

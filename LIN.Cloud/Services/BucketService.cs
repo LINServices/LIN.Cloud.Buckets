@@ -4,6 +4,12 @@ public class BucketService
 {
 
     /// <summary>
+    /// Ruta default.
+    /// </summary>
+    public static string Default { get; set; } = "wwwroot/data";
+
+
+    /// <summary>
     /// Bucket.
     /// </summary>
     private readonly int Bucket = 0;
@@ -46,7 +52,7 @@ public class BucketService
     {
 
         // Ruta del bucket.
-        Path = System.IO.Path.Combine("wwwroot/data", "storage", Bucket.ToString());
+        Path = System.IO.Path.Combine(Default, "storage", Bucket.ToString());
 
         // Crear el directorio.
         Create();
