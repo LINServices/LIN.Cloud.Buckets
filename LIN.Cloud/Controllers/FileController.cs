@@ -1,6 +1,7 @@
 namespace LIN.Cloud.Controllers;
 
 [Route("[controller]")]
+[ServiceFilter(typeof(IdentityTokenAttribute))]
 public class FileController(IFileRepository fileManager) : ControllerBase
 {
 
@@ -109,8 +110,5 @@ public class FileController(IFileRepository fileManager) : ControllerBase
         return File(result.Data, result.MimeType, result.Name);
 
     }
-
-
-
 
 }

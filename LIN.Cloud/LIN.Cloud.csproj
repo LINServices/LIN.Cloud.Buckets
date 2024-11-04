@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Global.Utilities" Version="1.0.0" />
     <PackageReference Include="Http.Utils" Version="2.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
@@ -15,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Tipos\LIN.Types.Cloud\LIN.Types.Cloud.csproj" />
+    <ProjectReference Include="..\LIN.Cloud.Persistence\LIN.Cloud.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

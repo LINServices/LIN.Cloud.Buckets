@@ -12,32 +12,15 @@ public class BucketService
     /// <summary>
     /// Bucket.
     /// </summary>
-    private readonly int Bucket = 0;
+    private int Bucket = 0;
 
 
-    /// <summary>
-    /// Nuevo servicio de bucket.
-    /// </summary>
-    public BucketService(IHttpContextAccessor accessor)
+
+    public void SetData(BucketModel bucket)
     {
-        // Contexto HTTP.
-        var httpContext = accessor.HttpContext;
-
-        // Obtiene el valor.
-        bool can = httpContext!.Request.Query.TryGetValue("key", out Microsoft.Extensions.Primitives.StringValues value);
-
-        // Información del token.
-        bool findBucket = true;
-
-        // Error de autenticación.
-        if (!can || !findBucket)
-        {
-        }
-
-        Bucket = 1;
+       Bucket = bucket.Id;
         SetData();
     }
-
 
     /// <summary>
     /// Ruta principal.
