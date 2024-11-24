@@ -31,7 +31,8 @@ public class IdentityTokenAttribute(BucketService bucketService, Persistence.Dat
             await httpContext.Response.WriteAsJsonAsync(new ResponseBase()
             {
                 Message = "Llave invalida.",
-                Errors = [
+                Errors = 
+                [
                     new ErrorModel()
                     {
                         Tittle = "Llave invalido",

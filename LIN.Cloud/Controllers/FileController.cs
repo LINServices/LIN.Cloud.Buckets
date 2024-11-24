@@ -32,7 +32,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
                 Response = Responses.Unauthorized
             };
 
-        // Crear el archivo
+        // Crear el archivo.
         var (created, name) = await fileManager.Save(modelo, aleatoryName);
 
         // Si no se pudo crear
