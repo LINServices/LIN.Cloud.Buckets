@@ -10,11 +10,12 @@
     <PackageReference Include="Global.Utilities" Version="1.0.0" />
     <PackageReference Include="Http.Utils" Version="2.9.0" />
     <PackageReference Include="LIN.Access.Developer" Version="1.2.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\LIN.Cloud.Identity.Utilities\LIN.Cloud.Identity.Utilities.csproj" />
     <ProjectReference Include="..\..\..\Tipos\LIN.Types.Cloud\LIN.Types.Cloud.csproj" />
     <ProjectReference Include="..\LIN.Cloud.Persistence\LIN.Cloud.Persistence.csproj" />
   </ItemGroup>

@@ -2,46 +2,41 @@ namespace LIN.Cloud.Controllers;
 
 [Route("[controller]")]
 [ServiceFilter(typeof(IdentityTokenAttribute))]
-public class FileController(IFileRepository fileManager) : ControllerBase
+public class FileController(IFileRepository fileManager, BucketService bucketService) : ControllerBase
 {
 
-    [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create(IFormFile modelo)
+    /// <summary>
+    /// Crear un nuevo archivo en un contenedor.
+    /// </summary>
+    /// <param name="modelo">Modelo.</param>
+    [HttpPost]
+    public async Task<HttpCreateResponse> Create(IFormFile modelo, [FromQuery] bool aleatoryName = false)
     {
 
         // Modelo es null
-        if (modelo == null)
-        {
+        if (modelo is null)
             return new CreateResponse()
             {
                 Message = "Parámetros inválidos,",
                 Response = Responses.InvalidParam
             };
-        }
 
+        // Obtener el tamaño en bytes.
+        double sizeInKb = modelo.Length.BytesaKB();
 
-        // Obtiene el tamaño en disco
-        long sizeInBytes = modelo.Length;
-
-        decimal sizeInMB = (decimal)sizeInBytes / (decimal)(1024 * 1024);
-
-
-        // Valida el tamaño disponible del usuario
-        //if ((FileSize + sizeInMB) > MaxFileSize)
-        //{
-        //    return new CreateResponse()
-        //    {
-        //        Response = Responses.InsufficientStorage,
-        //        Message = "No tienes suficiente espacio."
-        //    };
-        //}
-
+        // Si no queda espacio.
+        if (bucketService.Bucket?.MaxSize < (bucketService.Bucket?.ActualSize + sizeInKb))
+            return new CreateResponse()
+            {
+                Message = $"No tienes espacio suficiente en el contenedor {bucketService.Bucket.Name}",
+                Response = Responses.Unauthorized
+            };
 
         // Crear el archivo
-        var result = await fileManager.Save(modelo);
+        var (created, name) = await fileManager.Save(modelo, aleatoryName);
 
         // Si no se pudo crear
-        if (!result)
+        if (!created)
         {
             return new CreateResponse()
             {
@@ -50,17 +45,12 @@ public class FileController(IFileRepository fileManager) : ControllerBase
             };
         }
 
-        // Registra el cambio
-        //FileSize += sizeInMB;
-
-
         return new CreateResponse()
         {
+            LastUnique = name,
             Response = Responses.Success,
-            Message = $"Se creo el archivo con peso final de '{sizeInMB:0.00}' mb"
+            Message = $"Se creo el archivo."
         };
-
-
     }
 
 

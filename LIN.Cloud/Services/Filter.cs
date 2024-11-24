@@ -1,10 +1,9 @@
 ﻿using LIN.Types.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LIN.Cloud.Services;
 
-public class IdentityTokenAttribute(BucketService bucketService) : ActionFilterAttribute
+public class IdentityTokenAttribute(BucketService bucketService, Persistence.Data.BucketData bucketData) : ActionFilterAttribute
 {
 
     /// <summary>
@@ -44,7 +43,22 @@ public class IdentityTokenAttribute(BucketService bucketService) : ActionFilterA
             return;
         }
 
-        bucketService.SetData(billing.Model.ProjectId);
+        // Obtener el bucket.
+        var bucket = await bucketData.ReadByProject(billing.Model.ProjectId);
+
+        if (bucket.Response != Responses.Success)
+        {
+            httpContext.Response.StatusCode = 404;
+            await httpContext.Response.WriteAsJsonAsync(new ResponseBase()
+            {
+                Message = "Bucket not found.",
+                Errors = [],
+                Response = Responses.Unauthorized
+            });
+            return;
+        }
+
+        bucketService.SetData(bucket.Model);
 
         await base.OnActionExecutionAsync(context, next);
 

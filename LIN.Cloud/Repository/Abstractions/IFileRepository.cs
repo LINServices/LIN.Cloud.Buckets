@@ -2,7 +2,7 @@
 
 public interface IFileRepository
 {
-    public Task<bool> Save(IFormFile data);
+    public Task<(bool, string)> Save(IFormFile data, bool aleatoryName);
 
     public FileModel? Get(string file);
 

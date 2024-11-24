@@ -6,47 +6,63 @@ namespace LIN.Cloud.Controllers;
 public class BucketController(BucketData bucketData) : ControllerBase
 {
 
-
+    /// <summary>
+    /// Crear un nuevo Bucket.
+    /// </summary>
+    /// <param name="modelo">Modelo de la cuenta de almacenamiento.</param>
+    /// <param name="cloud">Token cloud.</param>
     [HttpPost]
-    public async Task<HttpCreateResponse> Create(BucketModel modelo, [FromHeader]string key)
+    public async Task<HttpCreateResponse> Create([FromBody]BucketModel modelo, [FromHeader] string cloud)
     {
-
-
-        // Modelo es null
-        if (modelo == null)
-        {
+        // Validar el modelo.
+        if (modelo is null || string.IsNullOrWhiteSpace(modelo.Name))
             return new CreateResponse()
             {
                 Message = "Parámetros inválidos,",
                 Response = Responses.InvalidParam
             };
-        }
 
-        var billing = await LIN.Access.Developer.Controllers.Billings.Create(key, 0);
+        // Validar token Cloud.
+        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
-        if (billing.Response != Types.Responses.Responses.Success)
-            return new CreateResponse();
+        if (!authenticated)
+            return new CreateResponse()
+            {
+                Response = Responses.Unauthorized,
+                Message = "Token cloud invalido."
+            };
 
+        // Modelo.
+        modelo.ProjectId = project;
+
+        // Crear el contenedor.
         var response = await bucketData.Create(modelo);
 
-        return new()
-        {
-            Response = Responses.Success
-        };
-
+        return response;
     }
 
 
+    /// <summary>
+    /// Obtener información de una cuenta de almacenamiento.
+    /// </summary>
+    /// <param name="cloud">Token cloud.</param>
     [HttpGet]
-    public async Task<HttpReadOneResponse<BucketModel>> Read([FromHeader] string key)
+    public async Task<HttpReadOneResponse<BucketModel>> Read([FromHeader] string cloud)
     {
 
-        var billing = await LIN.Access.Developer.Controllers.Billings.Create(key, 0);
+        // Validar token.
+        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
-        if (billing.Response != Types.Responses.Responses.Success)
-            return new();
-
-        var response = await bucketData.ReadByProject(billing.Model.ProjectId);
+        // Si hubo un error.
+        if (!authenticated)
+            return new()
+            {
+                Response = Responses.Unauthorized,
+                Message = "Token cloud es invalido."
+            };
+        
+        // Obtener el contendor.
+        var response = await bucketData.ReadByProject(project);
 
         return response;
 

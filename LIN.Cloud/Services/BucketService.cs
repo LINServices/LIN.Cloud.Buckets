@@ -1,6 +1,6 @@
 ﻿namespace LIN.Cloud.Services;
 
-public class BucketService
+public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
 {
 
     /// <summary>
@@ -12,15 +12,19 @@ public class BucketService
     /// <summary>
     /// BucketProjectId.
     /// </summary>
-    private int BucketProjectId = 0;
+    public BucketModel? Bucket { get; set; }
 
 
-
-    public void SetData(int bucket)
+    /// <summary>
+    /// Establecer el contenedor.
+    /// </summary>
+    /// <param name="bucket">Contenedor.</param>
+    public void SetData(BucketModel bucket)
     {
-       BucketProjectId = bucket;
+        Bucket = bucket;
         SetData();
     }
+
 
     /// <summary>
     /// Ruta principal.
@@ -35,7 +39,7 @@ public class BucketService
     {
 
         // Ruta del bucket.
-        Path = System.IO.Path.Combine(Default, "storage", BucketProjectId.ToString());
+        Path = System.IO.Path.Combine(Default, "storage", Bucket.Id.ToString());
 
         // Crear el directorio.
         Create();
@@ -55,11 +59,11 @@ public class BucketService
     /// Guardar archivo.
     /// </summary>
     /// <param name="file">Archivo.</param>
-    public async Task<bool> Save(IFormFile file)
+    public async Task<bool> Save(IFormFile file, string name)
     {
 
         // Ruta del archivo.
-        var filePath = System.IO.Path.Combine(Path, file.FileName);
+        var filePath = System.IO.Path.Combine(Path, name);
 
         // Validar si existe el archivo.
         if (File.Exists(filePath))
@@ -68,6 +72,9 @@ public class BucketService
         // Guardar el archivo en el servidor.
         using var stream = new FileStream(filePath, FileMode.OpenOrCreate);
         await file.CopyToAsync(stream);
+
+        // Actualizar 
+        await bucketData.UpdateSize(Bucket?.Id ?? 0, file.Length.BytesaKB());
 
         return true;
 
@@ -115,6 +122,5 @@ public class BucketService
         }
         return mimeType;
     }
-
 
 }

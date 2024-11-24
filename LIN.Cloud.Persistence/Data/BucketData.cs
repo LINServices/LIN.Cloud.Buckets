@@ -100,6 +100,28 @@ public class BucketData(DataContext context)
     }
 
 
+    public async Task<ResponseBase> UpdateSize(int id, double add)
+    {
+        try
+        {
+            var bucket = await (from b in context.Buckets
+                                where b.Id == id
+                                select b).ExecuteUpdateAsync(t => t.SetProperty(t => t.ActualSize, t => t.ActualSize + add));
+
+            if (bucket <= 0)
+                return new(Responses.NotRows);
+
+
+            return new(Responses.Success);
+        }
+        catch
+        {
+
+        }
+        return new();
+    }
+
+
 
 
 

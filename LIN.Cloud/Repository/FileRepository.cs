@@ -6,18 +6,18 @@ public class FileRepository(BucketService bucketService) : IFileRepository
     /// <summary>
     /// Guardar archivo.
     /// </summary>
-    public async Task<bool> Save(IFormFile data)
+    public async Task<(bool, string)> Save(IFormFile data, bool aleatoryName)
     {
         try
         {
             // Guardar el archivo.
-            bool saveResult = await bucketService.Save(data);
-
-            return true;
+            string name = aleatoryName ? Guid.NewGuid().ToString() : data.FileName;
+            var response = await bucketService.Save(data, name);
+            return (response, name);
         }
         catch
         {
-            return false;
+            return (false, string.Empty);
         }
     }
 

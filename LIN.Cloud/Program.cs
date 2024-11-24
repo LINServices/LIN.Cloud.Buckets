@@ -37,4 +37,7 @@ app.MapControllers();
 LIN.Access.Developer.Build.Init();
 BucketService.Default = "C:/Data/Cloud";
 
+// Llave de LIN Cloud Developers.
+LIN.Cloud.Identity.Utilities.Build.Init(builder.Configuration["identity:key"] ?? string.Empty);
+
 app.Run();
