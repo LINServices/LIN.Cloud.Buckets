@@ -1,9 +1,10 @@
 ﻿using LIN.Types.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LIN.Cloud.Services;
 
-public class IdentityTokenAttribute(LIN.Cloud.Persistence.Data.BucketIdentityData identityData, BucketService bucketService) : ActionFilterAttribute
+public class IdentityTokenAttribute(BucketService bucketService) : ActionFilterAttribute
 {
 
     /// <summary>
@@ -21,10 +22,11 @@ public class IdentityTokenAttribute(LIN.Cloud.Persistence.Data.BucketIdentityDat
         bool can = httpContext.Request.Headers.TryGetValue("key", out Microsoft.Extensions.Primitives.StringValues value);
 
         // Información del token.
-        var tokenInfo = await identityData.Key(value.ToString());
+
+        var billing = await LIN.Access.Developer.Controllers.Billings.Create(value.ToString(), 0);
 
         // Error de autenticación.
-        if (!can || tokenInfo.Response != Responses.Success)
+        if (!can || billing.Response != Responses.Success)
         {
             httpContext.Response.StatusCode = 401;
             await httpContext.Response.WriteAsJsonAsync(new ResponseBase()
@@ -42,7 +44,7 @@ public class IdentityTokenAttribute(LIN.Cloud.Persistence.Data.BucketIdentityDat
             return;
         }
 
-        bucketService.SetData(tokenInfo.Model);
+        bucketService.SetData(billing.Model.ProjectId);
 
         await base.OnActionExecutionAsync(context, next);
 

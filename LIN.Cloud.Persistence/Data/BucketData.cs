@@ -53,6 +53,29 @@ public class BucketData(DataContext context)
     }
 
 
+    public async Task<ReadOneResponse<BucketModel>> ReadByProject(int id)
+    {
+        try
+        {
+            var bucket = await (from b in context.Buckets
+                                where b.ProjectId == id
+                                select b).FirstOrDefaultAsync();
+
+            if (bucket is null)
+            {
+                return new(Responses.NotRows);
+            }
+
+            return new(Responses.Success, bucket);
+        }
+        catch
+        {
+
+        }
+        return new();
+    }
+
+
 
     public async Task<ResponseBase> Delete(int id)
     {

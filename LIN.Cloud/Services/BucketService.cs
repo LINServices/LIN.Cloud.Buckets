@@ -10,15 +10,15 @@ public class BucketService
 
 
     /// <summary>
-    /// Bucket.
+    /// BucketProjectId.
     /// </summary>
-    private int Bucket = 0;
+    private int BucketProjectId = 0;
 
 
 
-    public void SetData(BucketModel bucket)
+    public void SetData(int bucket)
     {
-       Bucket = bucket.Id;
+       BucketProjectId = bucket;
         SetData();
     }
 
@@ -35,7 +35,7 @@ public class BucketService
     {
 
         // Ruta del bucket.
-        Path = System.IO.Path.Combine(Default, "storage", Bucket.ToString());
+        Path = System.IO.Path.Combine(Default, "storage", BucketProjectId.ToString());
 
         // Crear el directorio.
         Create();

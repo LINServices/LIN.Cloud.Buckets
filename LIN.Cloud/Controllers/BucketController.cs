@@ -3,13 +3,14 @@ using LIN.Cloud.Persistence.Data;
 namespace LIN.Cloud.Controllers;
 
 [Route("[controller]")]
-public class BucketController(BucketData bucketData, BucketIdentityData bucketIdentityData) : ControllerBase
+public class BucketController(BucketData bucketData) : ControllerBase
 {
 
 
-    [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create(BucketModel modelo, int identity)
+    [HttpPost]
+    public async Task<HttpCreateResponse> Create(BucketModel modelo, [FromHeader]string key)
     {
+
 
         // Modelo es null
         if (modelo == null)
@@ -21,14 +22,12 @@ public class BucketController(BucketData bucketData, BucketIdentityData bucketId
             };
         }
 
-        var response = await bucketData.Create(modelo);
+        var billing = await LIN.Access.Developer.Controllers.Billings.Create(key, 0);
 
-        var responseIdentity = await bucketIdentityData.Create(new BucketIdentityModel()
-        {
-            BucketModel = modelo,
-            BucketId = response.LastID,
-            IdentityId = identity,
-        });
+        if (billing.Response != Types.Responses.Responses.Success)
+            return new CreateResponse();
+
+        var response = await bucketData.Create(modelo);
 
         return new()
         {
@@ -38,28 +37,19 @@ public class BucketController(BucketData bucketData, BucketIdentityData bucketId
     }
 
 
-
-
-    [HttpPost("create/key")]
-    public async Task<HttpCreateResponse> CreateKey(int bucket)
+    [HttpGet]
+    public async Task<HttpReadOneResponse<BucketModel>> Read([FromHeader] string key)
     {
 
-        string key = Global.Utilities.KeyGenerator.Generate(20, "pk.");
-        var response = await bucketIdentityData.CreateKey(new()
-        {
-            BucketId = bucket,
-            Key = key
-        });
+        var billing = await LIN.Access.Developer.Controllers.Billings.Create(key, 0);
 
-        return new CreateResponse()
-        {
-            Response = Responses.Success,
-            LastUnique = key
-        };
+        if (billing.Response != Types.Responses.Responses.Success)
+            return new();
+
+        var response = await bucketData.ReadByProject(billing.Model.ProjectId);
+
+        return response;
 
     }
-
-
-
 
 }

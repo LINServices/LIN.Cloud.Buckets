@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Agregar servicios al contenedor.
 builder.Services.AddLINHttp(true, (options) =>
 {
-    options.OperationFilter<CustomOperationFilter<ServiceFilterAttribute>>("key");
+    options.OperationFilter<Http.Extensions.OpenApi.HeaderMapAttribute<ServiceFilterAttribute>>("key");
 });
 
 builder.Services.AddSignalR();
@@ -34,6 +34,7 @@ app.UseDataBase();
 app.UseAuthorization();
 app.MapControllers();
 
+LIN.Access.Developer.Build.Init();
 BucketService.Default = "C:/Data/Cloud";
 
 app.Run();
