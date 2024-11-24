@@ -35,6 +35,9 @@ public class BucketController(BucketData bucketData) : ControllerBase
         // Modelo.
         modelo.ProjectId = project;
 
+        // El tamaño llega en MB lo convertimos a KB.
+        modelo.MaxSize *= 1024;
+
         // Crear el contenedor.
         var response = await bucketData.Create(modelo);
 

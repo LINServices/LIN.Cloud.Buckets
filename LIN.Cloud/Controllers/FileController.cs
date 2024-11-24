@@ -54,21 +54,22 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
     }
 
 
-
+    /// <summary>
+    /// Obtener el mapa de los archivos.
+    /// </summary>
     [HttpGet("map")]
-    public async Task<HttpReadOneResponse<StorageMap>> GetMap()
+    public HttpReadOneResponse<StorageMap> GetMap()
     {
 
-        // Crear el archivo
+        // Obtener el mapa.
         var result = fileManager.GetMap();
 
+        // Respuestas.
         return new ReadOneResponse<StorageMap>()
         {
             Response = Responses.Success,
             Model = result
         };
-
-
     }
 
 
@@ -91,14 +92,13 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
 
 
     [HttpGet]
-    public async Task<IActionResult> k([FromQuery] string route)
+    public async Task<IActionResult> GetFile([FromQuery] string route)
     {
 
         // Crear el archivo
         var result = fileManager.Get(route);
 
         return File(result.Data, result.MimeType, result.Name);
-
     }
 
 }
