@@ -1,4 +1,6 @@
-﻿namespace LIN.Cloud.Services;
+﻿using LIN.Types.Models;
+
+namespace LIN.Cloud.Services;
 
 public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
 {
@@ -59,15 +61,30 @@ public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
     /// Guardar archivo.
     /// </summary>
     /// <param name="file">Archivo.</param>
-    public async Task<bool> Save(IFormFile file, string name)
+    public async Task<ReadAllResponse<int>> Save(IFormFile file, string path, string name)
     {
 
         // Ruta del archivo.
-        var filePath = System.IO.Path.Combine(Path, name);
+        var filePath = System.IO.Path.Combine(Path, path);
+
+        // Si no existe la carpeta, la creamos.
+        if (!Directory.Exists(filePath))
+            Directory.CreateDirectory(filePath);
+        
+        // Ruta del archivo.
+        filePath = System.IO.Path.Combine(filePath, name);
 
         // Validar si existe el archivo.
         if (File.Exists(filePath))
-            return false;
+        {
+            return new(Responses.Undefined)
+            {
+                Errors = [new ErrorModel() {
+                    Description = $"Ya existe la ruta {filePath}",
+                    Tittle = "Archivo duplicado."
+                }]
+            };
+        }
 
         // Guardar el archivo en el servidor.
         using var stream = new FileStream(filePath, FileMode.OpenOrCreate);
@@ -76,7 +93,7 @@ public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
         // Actualizar 
         await bucketData.UpdateSize(Bucket?.Id ?? 0, file.Length.BytesaKB());
 
-        return true;
+        return new(Responses.Success);
 
     }
 

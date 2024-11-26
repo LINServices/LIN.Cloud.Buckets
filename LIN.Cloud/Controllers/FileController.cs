@@ -10,14 +10,14 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
     /// </summary>
     /// <param name="modelo">Modelo.</param>
     [HttpPost]
-    public async Task<HttpCreateResponse> Create(IFormFile modelo, [FromQuery] bool aleatoryName = false)
+    public async Task<HttpCreateResponse> Create(IFormFile modelo, [FromQuery] string? path = null, [FromQuery] bool aleatoryName = false)
     {
 
         // Modelo es null
         if (modelo is null)
             return new CreateResponse()
             {
-                Message = "Parámetros inválidos,",
+                Message = "Parámetros inválidos.",
                 Response = Responses.InvalidParam
             };
 
@@ -29,19 +29,20 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
             return new CreateResponse()
             {
                 Message = $"No tienes espacio suficiente en el contenedor {bucketService.Bucket.Name}",
-                Response = Responses.Unauthorized
+                Response = Responses.InsufficientStorage
             };
 
         // Crear el archivo.
-        var (created, name) = await fileManager.Save(modelo, aleatoryName);
+        var (response, name) = await fileManager.Save(modelo, path, aleatoryName);
 
         // Si no se pudo crear
-        if (!created)
+        if (response.Response != Responses.Success)
         {
             return new CreateResponse()
             {
                 Response = Responses.Undefined,
-                Message = "No se creo el archivo."
+                Message = "No se creo el archivo.",
+                Errors = response.Errors
             };
         }
 
@@ -58,11 +59,11 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
     /// Obtener el mapa de los archivos.
     /// </summary>
     [HttpGet("map")]
-    public HttpReadOneResponse<StorageMap> GetMap()
+    public HttpReadOneResponse<StorageMap> GetMap([FromQuery] string? path = null)
     {
 
         // Obtener el mapa.
-        var result = fileManager.GetMap();
+        var result = fileManager.GetMap(path);
 
         // Respuestas.
         return new ReadOneResponse<StorageMap>()
@@ -75,7 +76,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
 
 
     [HttpGet("file")]
-    public async Task<HttpReadOneResponse<FileModel>> GetMap([FromQuery] string route)
+    public async Task<HttpReadOneResponse<FileModel>> Getf([FromQuery] string route)
     {
 
         // Crear el archivo

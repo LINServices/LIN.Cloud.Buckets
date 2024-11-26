@@ -2,10 +2,10 @@
 
 public interface IFileRepository
 {
-    public Task<(bool, string)> Save(IFormFile data, bool aleatoryName);
+    public Task<(ReadAllResponse<int>, string)> Save(IFormFile data, string? path, bool aleatoryName);
 
     public FileModel? Get(string file);
 
-    public StorageMap GetMap();
+    public StorageMap GetMap(string? path = null);
 
 }

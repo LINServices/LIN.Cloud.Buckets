@@ -1,4 +1,6 @@
-﻿namespace LIN.Cloud.Repository;
+﻿using System.Net.Sockets;
+
+namespace LIN.Cloud.Repository;
 
 public class FileRepository(BucketService bucketService) : IFileRepository
 {
@@ -6,18 +8,21 @@ public class FileRepository(BucketService bucketService) : IFileRepository
     /// <summary>
     /// Guardar archivo.
     /// </summary>
-    public async Task<(bool, string)> Save(IFormFile data, bool aleatoryName)
+    public async Task<(ReadAllResponse<int>, string)> Save(IFormFile data, string? path,bool aleatoryName)
     {
         try
         {
             // Guardar el archivo.
             string name = aleatoryName ? Guid.NewGuid().ToString() : data.FileName;
-            var response = await bucketService.Save(data, name);
+            var response = await bucketService.Save(data, path ?? string.Empty, name);
             return (response, name);
         }
-        catch
+        catch(Exception ex)
         {
-            return (false, string.Empty);
+            return (new()
+            {
+                Errors = [new() { Description = ex.Message}]
+            }, string.Empty);
         }
     }
 
@@ -43,7 +48,7 @@ public class FileRepository(BucketService bucketService) : IFileRepository
     /// <summary>
     /// Obtener el mapa de carpetas.
     /// </summary>
-    public StorageMap GetMap()
+    public StorageMap GetMap(string? path = null)
     {
         try
         {
@@ -53,7 +58,7 @@ public class FileRepository(BucketService bucketService) : IFileRepository
                 Folder = new()
             };
 
-            BuildDirectory(map, map.Folder, [bucketService.Path]);
+            BuildDirectory(map, map.Folder, [System.IO.Path.Combine(bucketService.Path, path ?? "")]);
 
             return map;
         }
