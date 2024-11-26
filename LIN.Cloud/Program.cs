@@ -7,6 +7,7 @@ global using Microsoft.AspNetCore.StaticFiles;
 global using LIN.Cloud.Repository.Abstractions;
 using Http.Extensions;
 using LIN.Cloud.Persistence.Extensions;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLINHttp(true, (options) =>
 {
     options.OperationFilter<Http.Extensions.OpenApi.HeaderMapAttribute<ServiceFilterAttribute>>("key");
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = long.MaxValue;
 });
 
 builder.Services.AddSignalR();
