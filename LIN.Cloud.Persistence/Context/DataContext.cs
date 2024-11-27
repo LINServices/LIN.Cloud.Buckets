@@ -6,8 +6,8 @@ namespace LIN.Cloud.Identity.Persistence.Contexts;
 public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
 
-
     public DbSet<BucketModel> Buckets { get; set; }
+    public DbSet<PublicFileModel> PublicFiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,7 +17,11 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
             entity.HasIndex(t=>t.ProjectId).IsUnique();
         });
 
-    
+        modelBuilder.Entity<PublicFileModel>(entity =>
+        {
+            entity.ToTable("public_files");
+            entity.HasKey(t => t.Key);
+        });
 
         base.OnModelCreating(modelBuilder);
     }

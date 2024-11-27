@@ -7,6 +7,7 @@ namespace LIN.Cloud.Persistence.Data;
 
 public class BucketData(DataContext context)
 {
+
     public async Task<CreateResponse> Create(BucketModel bucket)
     {
         bucket.Id = 0;

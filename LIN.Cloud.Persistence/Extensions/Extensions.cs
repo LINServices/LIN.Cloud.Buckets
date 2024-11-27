@@ -24,6 +24,7 @@ public static class Extensions
         });
 
         services.AddScoped<BucketData, BucketData>();
+        services.AddScoped<PublicFilesData>();
         return services;
     }
 

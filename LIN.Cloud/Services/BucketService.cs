@@ -2,7 +2,7 @@
 
 namespace LIN.Cloud.Services;
 
-public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
+public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData, Persistence.Data.PublicFilesData filesData)
 {
 
     /// <summary>
@@ -12,9 +12,9 @@ public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
 
 
     /// <summary>
-    /// BucketProjectId.
+    /// Bucket ProjectId.
     /// </summary>
-    public BucketModel? Bucket { get; set; }
+    public BucketModel Bucket { get; set; }
 
 
     /// <summary>
@@ -91,7 +91,7 @@ public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
         await file.CopyToAsync(stream);
 
         // Actualizar 
-        await bucketData.UpdateSize(Bucket?.Id ?? 0, file.Length.BytesaKB());
+        await bucketData.UpdateSize(Bucket.Id, file.Length.BytesaKB());
 
         return new(Responses.Success);
 
@@ -124,6 +124,44 @@ public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData)
             MimeType = GetMimeType(fileInformation.FullName)
         };
     }
+
+
+    /// <summary>
+    /// Obtener archivo.
+    /// </summary>
+    /// <param name="path">Ruta al archivo.</param>
+    public async Task<string> GetPublic(string path, int minutes)
+    {
+        // Ruta del archivo.
+        var filePath = System.IO.Path.Combine(Path, path);
+
+        // Validar si existe el archivo.
+        if (!File.Exists(filePath))
+            return "";
+
+        // Obtener información.
+        FileInfo fileInformation = new(filePath);
+
+        // Obtener bytes.
+        byte[] data = File.ReadAllBytes(filePath);
+
+        // Obtener información.
+
+        // Generar una llave unica
+        string key = Guid.NewGuid().ToString();
+
+        // Guardar llave en BD.
+        await filesData.Create(new()
+        {
+            Expires = DateTime.UtcNow.AddMinutes(minutes),
+            Key = key,
+            Path = path,
+            Bucket = Bucket.Id
+        });
+
+        return key;
+    }
+
 
 
     /// <summary>
