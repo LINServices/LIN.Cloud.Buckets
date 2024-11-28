@@ -6,7 +6,6 @@ namespace LIN.Cloud.Controllers;
 public class PublicFilesController(BucketService bucketService, Persistence.Data.PublicFilesData publicFilesData) : ControllerBase
 {
 
-
     /// <summary>
     /// Obtener la ruta publica para un archivo.
     /// </summary>
@@ -38,15 +37,22 @@ public class PublicFilesController(BucketService bucketService, Persistence.Data
         // Validar la llave.
         var exist = await publicFilesData.Read(path);
 
+        // Si no se encontró.
         if (exist.Response != Responses.Success)
-            return NotFound();
+            return NoContent();
 
+        // Iniciar el servicio de bucket.
         bucketService.SetData(new()
         {
             Id = exist.Model.Bucket
         });
 
+        // Obtener el archivo.
         var file = bucketService.Get(exist.Model.Path);
+
+        // Si el archivo no se encontró.
+        if (file is null)
+            return NoContent();
 
         return File(file.Data, file.MimeType, file.Name);
 

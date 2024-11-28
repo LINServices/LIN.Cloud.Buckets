@@ -14,7 +14,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
         modelBuilder.Entity<BucketModel>(entity =>
         {
             entity.ToTable("buckets");
-            entity.HasIndex(t=>t.ProjectId).IsUnique();
+            entity.HasIndex(t => t.ProjectId).IsUnique();
         });
 
         modelBuilder.Entity<PublicFileModel>(entity =>

@@ -28,7 +28,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
         if (bucketService.Bucket.MaxSize < (bucketService.Bucket?.ActualSize + sizeInKb))
             return new CreateResponse()
             {
-                Message = $"No tienes espacio suficiente en el contenedor {bucketService.Bucket.Name}",
+                Message = $"No tienes espacio suficiente en el contenedor {bucketService.Bucket?.Name}",
                 Response = Responses.InsufficientStorage
             };
 
