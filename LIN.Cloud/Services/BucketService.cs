@@ -145,15 +145,13 @@ public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData, Per
         // Obtener bytes.
         byte[] data = File.ReadAllBytes(filePath);
 
-        // Obtener información.
-
         // Generar una llave unica
         string key = Guid.NewGuid().ToString();
 
         // Guardar llave en BD.
         await filesData.Create(new()
         {
-            Expires = DateTime.UtcNow.AddMinutes(minutes),
+            Expires = minutes == -1 ? null : DateTime.UtcNow.AddMinutes(minutes),
             Key = key,
             Path = path,
             Bucket = Bucket.Id

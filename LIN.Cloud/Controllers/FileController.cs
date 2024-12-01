@@ -10,12 +10,12 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
     /// </summary>
     /// <param name="modelo">Modelo.</param>
     [HttpPost]
-    public async Task<HttpCreateResponse> Create(IFormFile modelo, [FromQuery] string? path = null, [FromQuery] bool aleatoryName = false)
+    public async Task<HttpReadOneResponse<dynamic>> Create(IFormFile modelo, [FromQuery] string? path = null, [FromQuery] bool aleatoryName = false, [FromQuery] bool @public = false)
     {
 
         // Modelo es null
         if (modelo is null)
-            return new CreateResponse()
+            return new()
             {
                 Message = "Parámetros inválidos.",
                 Response = Responses.InvalidParam
@@ -26,7 +26,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
 
         // Si no queda espacio.
         if (bucketService.Bucket.MaxSize < (bucketService.Bucket?.ActualSize + sizeInKb))
-            return new CreateResponse()
+            return new()
             {
                 Message = $"No tienes espacio suficiente en el contenedor {bucketService.Bucket?.Name}",
                 Response = Responses.InsufficientStorage
@@ -38,7 +38,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
         // Si no se pudo crear
         if (response.Response != Responses.Success)
         {
-            return new CreateResponse()
+            return new()
             {
                 Response = Responses.Undefined,
                 Message = "No se creo el archivo.",
@@ -46,9 +46,22 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
             };
         }
 
-        return new CreateResponse()
+        // Si se puede marcar publico
+        string key = "";
+        if (@public)
         {
-            LastUnique = name,
+            // Obtener la ruta publica.
+             key = await bucketService.GetPublic(Path.Combine(path ?? string.Empty, name), -1);
+
+        }
+
+        return new ReadOneResponse<dynamic>()
+        {
+            Model = new
+            {
+                publicPath = key,
+                name = name
+            },
             Response = Responses.Success,
             Message = $"Se creo el archivo."
         };
