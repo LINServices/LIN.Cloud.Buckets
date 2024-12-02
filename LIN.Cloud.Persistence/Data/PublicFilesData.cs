@@ -41,7 +41,7 @@ public class PublicFilesData(DataContext context)
         {
             var publicFile = await (from b in context.PublicFiles
                                 where b.Key == id
-                                where b.Expires > DateTime.UtcNow
+                                where b.Expires == null || b.Expires > DateTime.UtcNow
                                 select b).FirstOrDefaultAsync();
 
             if (publicFile is null)
