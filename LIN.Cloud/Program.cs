@@ -5,6 +5,7 @@ global using LIN.Types.Responses;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.StaticFiles;
 global using LIN.Cloud.Repository.Abstractions;
+using LIN.Access.Developer;
 using Http.Extensions;
 using LIN.Cloud.Persistence.Extensions;
 using Microsoft.AspNetCore.Http.Features;
@@ -25,6 +26,7 @@ builder.Services.Configure<FormOptions>(options =>
 builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddDeveloperService();
 
 // Servicios.
 builder.Services.AddScoped<IFileRepository, LIN.Cloud.Repository.FileRepository>();
@@ -40,7 +42,6 @@ app.UseDataBase();
 app.UseAuthorization();
 app.MapControllers();
 
-LIN.Access.Developer.Build.Init();
 BucketService.Default = "C:/Data/Cloud";
 
 // Llave de LIN Cloud Developers.

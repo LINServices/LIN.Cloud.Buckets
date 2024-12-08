@@ -5,10 +5,7 @@ namespace LIN.Cloud.Controllers;
 public class FileController(IFileRepository fileManager, BucketService bucketService) : ControllerBase
 {
 
-    /// <summary>
-    /// Crear un nuevo archivo en un contenedor.
-    /// </summary>
-    /// <param name="modelo">Modelo.</param>
+    
     [HttpPost]
     public async Task<HttpReadOneResponse<dynamic>> Create(IFormFile modelo, [FromQuery] string? path = null, [FromQuery] bool aleatoryName = false, [FromQuery] bool @public = false)
     {
