@@ -23,7 +23,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
             };
 
         // Validar token Cloud.
-        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
+        var (authenticated, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
         if (!authenticated)
             return new CreateResponse()
@@ -54,7 +54,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
     {
 
         // Validar token.
-        var (authenticated, _, project) = Identity.Utilities.JwtCloud.Validate(cloud);
+        var (authenticated, project) = Identity.Utilities.JwtCloud.Validate(cloud);
 
         // Si hubo un error.
         if (!authenticated)

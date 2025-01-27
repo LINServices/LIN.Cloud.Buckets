@@ -34,6 +34,14 @@ public class PublicFilesController(BucketService bucketService, Persistence.Data
     public async Task<IActionResult> File([FromRoute] string path)
     {
 
+        string extension = "";
+        if (path.Contains('.'))
+        {
+            var separator = path.Split('.');
+            path = separator[0];
+            extension = "." + separator[1];
+        }
+
         // Validar la llave.
         var exist = await publicFilesData.Read(path);
 
@@ -54,7 +62,7 @@ public class PublicFilesController(BucketService bucketService, Persistence.Data
         if (file is null)
             return NoContent();
 
-        return File(file.Data, file.MimeType, file.Name);
+        return File(file.Data, file.MimeType, file.Name + extension);
 
     }
 
