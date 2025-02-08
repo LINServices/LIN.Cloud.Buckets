@@ -11,6 +11,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
     /// </summary>
     /// <param name="modelo">Modelo de la cuenta de almacenamiento.</param>
     /// <param name="cloud">Token cloud.</param>
+    /// <returns>Retorna el resultado de la operación.</returns>
     [HttpPost]
     public async Task<HttpCreateResponse> Create([FromBody]BucketModel modelo, [FromHeader] string cloud)
     {

@@ -34,20 +34,21 @@ public class PublicFilesController(BucketService bucketService, Persistence.Data
     public async Task<IActionResult> File([FromRoute] string path)
     {
 
-        string extension = "";
-        if (path.Contains('.'))
-        {
-            var separator = path.Split('.');
-            path = separator[0];
-            extension = "." + separator[1];
-        }
-
         // Validar la llave.
         var exist = await publicFilesData.Read(path);
 
         // Si no se encontró.
         if (exist.Response != Responses.Success)
             return NoContent();
+
+        // Si el usuario le puso una extensión.
+        string extension = string.Empty;
+        if (path.Contains('.'))
+        {
+            var separator = path.Split('.');
+            path = separator[0];
+            extension = "." + separator[1];
+        }
 
         // Iniciar el servicio de bucket.
         bucketService.SetData(new()

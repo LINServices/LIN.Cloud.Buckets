@@ -1,4 +1,4 @@
-﻿using LIN.Cloud.Identity.Persistence.Contexts;
+﻿using LIN.Cloud.Persistence.Context;
 using LIN.Cloud.Persistence.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;

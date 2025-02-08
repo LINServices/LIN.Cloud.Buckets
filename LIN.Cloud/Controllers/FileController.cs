@@ -5,7 +5,14 @@ namespace LIN.Cloud.Controllers;
 public class FileController(IFileRepository fileManager, BucketService bucketService) : ControllerBase
 {
 
-    
+    /// <summary>
+    /// Crear un nuevo archivo en el repositorio.
+    /// </summary>
+    /// <param name="modelo">Modelo del archivo.</param>
+    /// <param name="path">Carpeta.</param>
+    /// <param name="aleatoryName">¿Tendrá nombre aleatorio?</param>
+    /// <param name="public">¿Sera un archivo publico por defecto?</param>
+    /// <returns>Retorna la dirección del archivo.</returns>
     [HttpPost]
     public async Task<HttpReadOneResponse<dynamic>> Create(IFormFile modelo, [FromQuery] string? path = null, [FromQuery] bool aleatoryName = false, [FromQuery] bool @public = false)
     {
@@ -32,7 +39,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
         // Crear el archivo.
         var (response, name) = await fileManager.Save(modelo, path, aleatoryName);
 
-        // Si no se pudo crear
+        // Si no se pudo crear.
         if (response.Response != Responses.Success)
         {
             return new()
@@ -48,8 +55,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
         if (@public)
         {
             // Obtener la ruta publica.
-             key = await bucketService.GetPublic(Path.Combine(path ?? string.Empty, name), -1);
-
+            key = await bucketService.GetPublic(Path.Combine(path ?? string.Empty, name), -1);
         }
 
         return new ReadOneResponse<dynamic>()
@@ -105,7 +111,6 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
     [HttpGet]
     public async Task<IActionResult> GetFile([FromQuery] string route)
     {
-
         // Crear el archivo
         var result = fileManager.Get(route);
 

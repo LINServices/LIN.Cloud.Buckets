@@ -1,4 +1,4 @@
-﻿using LIN.Cloud.Identity.Persistence.Contexts;
+﻿using LIN.Cloud.Persistence.Context;
 using LIN.Types.Cloud.Models;
 using LIN.Types.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -105,7 +105,6 @@ public class BucketData(DataContext context)
         }
         catch
         {
-
         }
         return new();
     }
@@ -131,7 +130,6 @@ public class BucketData(DataContext context)
         }
         catch
         {
-
         }
         return new();
     }
