@@ -23,7 +23,7 @@ public class BucketData(DataContext context)
             return new()
             {
                 Response = Responses.Success,
-                LastID = bucket.Id
+                LastId = bucket.Id
             };
         }
         catch
