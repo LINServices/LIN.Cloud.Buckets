@@ -31,7 +31,7 @@ builder.Services.AddDeveloperService();
 // Servicios.
 builder.Services.AddScoped<IFileRepository, LIN.Cloud.Repository.FileRepository>();
 builder.Services.AddScoped<BucketService, BucketService>();
-builder.Services.AddScoped<IdentityTokenAttribute, IdentityTokenAttribute>();
+builder.Services.AddScoped<IdentityKeyAttribute, IdentityKeyAttribute>();
 
 // Build.
 var app = builder.Build();

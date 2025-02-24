@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace LIN.Cloud.Services;
 
-public class IdentityTokenAttribute(BucketService bucketService, Persistence.Data.BucketData bucketData) : ActionFilterAttribute
+public class IdentityKeyAttribute(BucketService bucketService, Persistence.Data.BucketData bucketData) : ActionFilterAttribute
 {
 
     /// <summary>
@@ -20,12 +20,14 @@ public class IdentityTokenAttribute(BucketService bucketService, Persistence.Dat
         // Obtiene el valor.
         bool can = httpContext.Request.Headers.TryGetValue("key", out Microsoft.Extensions.Primitives.StringValues value);
 
-        // Información del token.
+        // Obtener la ip del cliente.
+        var ip = httpContext.Connection.RemoteIpAddress;
 
-        var billing = await LIN.Access.Developer.Controllers.Billings.Create(value.ToString(), 0);
+        // Información del token.
+        var validate = await Access.Developer.Controllers.Project.Validate(value.ToString(), ip?.MapToIPv4().ToString() ?? string.Empty);
 
         // Error de autenticación.
-        if (!can || billing.Response != Responses.Success)
+        if (!can || validate.Response != Responses.Success)
         {
             httpContext.Response.StatusCode = 401;
             await httpContext.Response.WriteAsJsonAsync(new ResponseBase()
@@ -36,7 +38,7 @@ public class IdentityTokenAttribute(BucketService bucketService, Persistence.Dat
                     new ErrorModel()
                     {
                         Tittle = "Llave invalido",
-                        Description = "El llave proporcionado en el header <key> es invalido."
+                        Description = "La llave proporcionado es invalida."
                     }
                 ],
                 Response = Responses.Unauthorized
@@ -45,7 +47,7 @@ public class IdentityTokenAttribute(BucketService bucketService, Persistence.Dat
         }
 
         // Obtener el bucket.
-        var bucket = await bucketData.ReadByProject(billing.Model.ProjectId);
+        var bucket = await bucketData.ReadByProject(validate.Model);
 
         if (bucket.Response != Responses.Success)
         {

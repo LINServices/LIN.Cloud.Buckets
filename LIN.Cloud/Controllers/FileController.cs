@@ -1,7 +1,7 @@
 namespace LIN.Cloud.Controllers;
 
 [Route("[controller]")]
-[ServiceFilter(typeof(IdentityTokenAttribute))]
+[ServiceFilter(typeof(IdentityKeyAttribute))]
 public class FileController(IFileRepository fileManager, BucketService bucketService) : ControllerBase
 {
 

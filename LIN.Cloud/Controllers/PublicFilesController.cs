@@ -12,7 +12,7 @@ public class PublicFilesController(BucketService bucketService, Persistence.Data
     /// <param name="path"></param>
     /// <returns></returns>
     [HttpGet("token")]
-    [ServiceFilter(typeof(IdentityTokenAttribute))]
+    [ServiceFilter(typeof(IdentityKeyAttribute))]
     public async Task<HttpReadOneResponse<StringValues>> GetPublic([FromQuery] string path, [FromQuery] int minutes)
     {
         // Obtener la ruta publica.
