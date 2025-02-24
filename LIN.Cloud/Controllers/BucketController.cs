@@ -13,7 +13,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
     /// <param name="cloud">Token cloud.</param>
     /// <returns>Retorna el resultado de la operación.</returns>
     [HttpPost]
-    public async Task<HttpCreateResponse> Create([FromBody]BucketModel modelo, [FromHeader] string cloud)
+    public async Task<HttpCreateResponse> Create([FromBody] BucketModel modelo, [FromHeader] string cloud)
     {
         // Validar el modelo.
         if (modelo is null || string.IsNullOrWhiteSpace(modelo.Name))
@@ -51,7 +51,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
     /// </summary>
     /// <param name="cloud">Token cloud.</param>
     [HttpGet]
-    public async Task<HttpReadOneResponse<BucketModel>> Read([FromHeader] string cloud)
+    public async Task<HttpReadOneResponse<Types.Developer.Projects.BucketProject>> Read([FromHeader] string cloud)
     {
 
         // Validar token.
@@ -64,12 +64,21 @@ public class BucketController(BucketData bucketData) : ControllerBase
                 Response = Responses.Unauthorized,
                 Message = "Token cloud es invalido."
             };
-        
+
         // Obtener el contendor.
         var response = await bucketData.ReadByProject(project);
 
-        return response;
-
+        return new ReadOneResponse<Types.Developer.Projects.BucketProject>()
+        {
+            Model = new()
+            {
+                IsProvisioned = response.Response == Responses.Success,
+                BucketSize = response.Model.MaxSize,
+                BucketActualSize = response.Model.ActualSize,
+                Status = Types.Developer.Enumerations.ProjectStatus.Normal
+            },
+            Response = response.Response
+        };
     }
 
 }
