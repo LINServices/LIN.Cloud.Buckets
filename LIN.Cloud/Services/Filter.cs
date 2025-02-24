@@ -29,20 +29,44 @@ public class IdentityKeyAttribute(BucketService bucketService, Persistence.Data.
         // Error de autenticación.
         if (!can || validate.Response != Responses.Success)
         {
-            httpContext.Response.StatusCode = 401;
-            await httpContext.Response.WriteAsJsonAsync(new ResponseBase()
+
+            ResponseBase response;
+
+            switch(validate.Response)
             {
-                Message = "Llave invalida.",
-                Errors = 
-                [
-                    new ErrorModel()
+                case Responses.FirewallBlocked:
+                    response = new ResponseBase()
                     {
-                        Tittle = "Llave invalido",
-                        Description = "La llave proporcionado es invalida."
-                    }
-                ],
-                Response = Responses.Unauthorized
-            });
+                        Message = "Firewall rejected.",
+                        Errors =
+                        [
+                            new ErrorModel()
+                            {
+                                Tittle = "Fuera de la red",
+                                Description = $"La ip '{ip?.MapToIPv4()}' no se encuentra en los rangos establecidos para el proyecto."
+                            }
+                        ],
+                        Response = Responses.Unauthorized
+                    };
+                    break;
+                default:
+                    response = new ResponseBase()
+                    {
+                        Message = "Llave invalida.",
+                        Errors =
+                        [
+                            new ErrorModel()
+                            {
+                                Tittle = "Llave invalido",
+                                Description = "La llave proporcionado es invalida."
+                            }
+                        ],
+                        Response = Responses.Unauthorized
+                    };
+                    break;
+            }
+            httpContext.Response.StatusCode = 401;
+            await httpContext.Response.WriteAsJsonAsync(response);
             return;
         }
 
