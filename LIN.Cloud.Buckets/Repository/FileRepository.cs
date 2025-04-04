@@ -1,6 +1,8 @@
-﻿using System.Net.Sockets;
+﻿using LIN.Cloud.Buckets.Repository.Abstractions;
+using LIN.Cloud.Buckets.Services;
+using System.Net.Sockets;
 
-namespace LIN.Cloud.Repository;
+namespace LIN.Cloud.Buckets.Repository;
 
 public class FileRepository(BucketService bucketService) : IFileRepository
 {
@@ -58,7 +60,7 @@ public class FileRepository(BucketService bucketService) : IFileRepository
                 Folder = new()
             };
 
-            BuildDirectory(map, map.Folder, [System.IO.Path.Combine(bucketService.Path, path ?? "")]);
+            BuildDirectory(map, map.Folder, [Path.Combine(bucketService.Path, path ?? "")]);
 
             return map;
         }

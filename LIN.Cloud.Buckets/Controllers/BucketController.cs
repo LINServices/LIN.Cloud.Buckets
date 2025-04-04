@@ -1,6 +1,6 @@
-using LIN.Cloud.Persistence.Data;
+using LIN.Cloud.Buckets.Persistence.Data;
 
-namespace LIN.Cloud.Controllers;
+namespace LIN.Cloud.Buckets.Controllers;
 
 [Route("[controller]")]
 public class BucketController(BucketData bucketData) : ControllerBase

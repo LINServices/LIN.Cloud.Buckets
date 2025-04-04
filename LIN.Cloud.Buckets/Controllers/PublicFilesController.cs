@@ -1,6 +1,7 @@
+using LIN.Cloud.Buckets.Services;
 using Microsoft.Extensions.Primitives;
 
-namespace LIN.Cloud.Controllers;
+namespace LIN.Cloud.Buckets.Controllers;
 
 [Route("[controller]")]
 public class PublicFilesController(BucketService bucketService, Persistence.Data.PublicFilesData publicFilesData) : ControllerBase

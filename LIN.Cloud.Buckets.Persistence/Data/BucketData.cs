@@ -1,9 +1,9 @@
-﻿using LIN.Cloud.Persistence.Context;
+﻿using LIN.Cloud.Buckets.Persistence.Context;
 using LIN.Types.Cloud.Models;
 using LIN.Types.Responses;
 using Microsoft.EntityFrameworkCore;
 
-namespace LIN.Cloud.Persistence.Data;
+namespace LIN.Cloud.Buckets.Persistence.Data;
 
 public class BucketData(DataContext context)
 {

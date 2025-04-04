@@ -1,7 +1,7 @@
 ﻿using LIN.Types.Cloud.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LIN.Cloud.Persistence.Context;
+namespace LIN.Cloud.Buckets.Persistence.Context;
 
 public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {

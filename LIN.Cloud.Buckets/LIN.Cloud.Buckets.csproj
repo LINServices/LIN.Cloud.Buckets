@@ -7,17 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Global.Utilities" Version="1.0.0" />
-    <PackageReference Include="Http.Utils" Version="3.3.2" />
-    <PackageReference Include="LIN.Access.Developer" Version="1.5.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
+    <PackageReference Include="Global.Utilities" Version="1.1.0" />
+    <PackageReference Include="Http.Utils" Version="4.1.0" />
+    <PackageReference Include="LIN.Access.Developer" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\LIN.Cloud.Identity.Utilities\LIN.Cloud.Identity.Utilities.csproj" />
     <ProjectReference Include="..\..\..\Tipos\LIN.Types.Cloud\LIN.Types.Cloud.csproj" />
-    <ProjectReference Include="..\LIN.Cloud.Persistence\LIN.Cloud.Persistence.csproj" />
+    <ProjectReference Include="..\LIN.Cloud.Buckets.Persistence\LIN.Cloud.Buckets.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

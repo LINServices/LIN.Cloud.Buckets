@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIN.Cloud", "LIN.Cloud\LIN.Cloud.csproj", "{1109CBEC-10A5-4E58-A9D5-2DF7F1445348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIN.Cloud.Buckets", "LIN.Cloud.Buckets\LIN.Cloud.Buckets.csproj", "{1109CBEC-10A5-4E58-A9D5-2DF7F1445348}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LIN.Types.Cloud", "..\..\Tipos\LIN.Types.Cloud\LIN.Types.Cloud.csproj", "{398CA76F-E703-4B2E-A964-5481B4996C80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIN.Cloud.Persistence", "LIN.Cloud.Persistence\LIN.Cloud.Persistence.csproj", "{D9D474B5-6558-4627-8879-FCF4D9A9BAD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIN.Cloud.Buckets.Persistence", "LIN.Cloud.Buckets.Persistence\LIN.Cloud.Buckets.Persistence.csproj", "{D9D474B5-6558-4627-8879-FCF4D9A9BAD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LIN.Cloud.Identity.Utilities", "..\..\Shared\LIN.Cloud.Identity.Utilities\LIN.Cloud.Identity.Utilities.csproj", "{D1C36BBB-4ACC-4F0D-99C1-D16FAFC4F1A7}"
 EndProject

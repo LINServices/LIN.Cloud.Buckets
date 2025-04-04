@@ -1,11 +1,11 @@
-﻿using LIN.Cloud.Persistence.Context;
-using LIN.Cloud.Persistence.Data;
+﻿using LIN.Cloud.Buckets.Persistence.Context;
+using LIN.Cloud.Buckets.Persistence.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LIN.Cloud.Persistence.Extensions;
+namespace LIN.Cloud.Buckets.Persistence.Extensions;
 
 public static class Extensions
 {

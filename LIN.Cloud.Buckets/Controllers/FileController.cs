@@ -1,4 +1,7 @@
-namespace LIN.Cloud.Controllers;
+using LIN.Cloud.Buckets.Repository.Abstractions;
+using LIN.Cloud.Buckets.Services;
+
+namespace LIN.Cloud.Buckets.Controllers;
 
 [Route("[controller]")]
 [ServiceFilter(typeof(IdentityKeyAttribute))]
@@ -29,7 +32,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
         double sizeInKb = modelo.Length.BytesaKB();
 
         // Si no queda espacio.
-        if (bucketService.Bucket.MaxSize < (bucketService.Bucket?.ActualSize + sizeInKb))
+        if (bucketService.Bucket.MaxSize < bucketService.Bucket?.ActualSize + sizeInKb)
             return new()
             {
                 Message = $"No tienes espacio suficiente en el contenedor {bucketService.Bucket?.Name}",
@@ -63,7 +66,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
             Model = new
             {
                 publicPath = key,
-                name = name
+                name
             },
             Response = Responses.Success,
             Message = $"Se creo el archivo."

@@ -1,4 +1,4 @@
-﻿namespace LIN.Cloud.Repository.Abstractions;
+﻿namespace LIN.Cloud.Buckets.Repository.Abstractions;
 
 public interface IFileRepository
 {

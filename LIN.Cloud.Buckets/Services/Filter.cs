@@ -1,7 +1,7 @@
 ﻿using LIN.Types.Models;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace LIN.Cloud.Services;
+namespace LIN.Cloud.Buckets.Services;
 
 public class IdentityKeyAttribute(BucketService bucketService, Persistence.Data.BucketData bucketData) : ActionFilterAttribute
 {

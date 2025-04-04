@@ -1,8 +1,8 @@
 ﻿using LIN.Types.Models;
 
-namespace LIN.Cloud.Services;
+namespace LIN.Cloud.Buckets.Services;
 
-public class BucketService(LIN.Cloud.Persistence.Data.BucketData bucketData, Persistence.Data.PublicFilesData filesData)
+public class BucketService(Persistence.Data.BucketData bucketData, Persistence.Data.PublicFilesData filesData)
 {
 
     /// <summary>
