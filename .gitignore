@@ -405,3 +405,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/LIN.Cloud.Buckets/appsettings.json
