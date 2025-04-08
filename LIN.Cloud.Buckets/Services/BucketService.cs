@@ -10,12 +10,10 @@ public class BucketService(Persistence.Data.BucketData bucketData, Persistence.D
     /// </summary>
     public static string Default { get; set; } = "wwwroot/data";
 
-
     /// <summary>
     /// Bucket ProjectId.
     /// </summary>
     public BucketModel Bucket { get; set; }
-
 
     /// <summary>
     /// Establecer el contenedor.
@@ -26,7 +24,6 @@ public class BucketService(Persistence.Data.BucketData bucketData, Persistence.D
         Bucket = bucket;
         SetData();
     }
-
 
     /// <summary>
     /// Ruta principal.
