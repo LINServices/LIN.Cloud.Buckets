@@ -1,8 +1,4 @@
-﻿using LIN.Cloud.Buckets.Repository.Abstractions;
-using LIN.Cloud.Buckets.Services;
-using System.Net.Sockets;
-
-namespace LIN.Cloud.Buckets.Repository;
+﻿namespace LIN.Cloud.Buckets.Repository;
 
 public class FileRepository(BucketService bucketService) : IFileRepository
 {
@@ -10,7 +6,7 @@ public class FileRepository(BucketService bucketService) : IFileRepository
     /// <summary>
     /// Guardar archivo.
     /// </summary>
-    public async Task<(ReadAllResponse<int>, string)> Save(IFormFile data, string? path,bool aleatoryName)
+    public async Task<(ReadAllResponse<int>, string)> Save(IFormFile data, string? path, bool aleatoryName)
     {
         try
         {
@@ -19,11 +15,11 @@ public class FileRepository(BucketService bucketService) : IFileRepository
             var response = await bucketService.Save(data, path ?? string.Empty, name);
             return (response, name);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return (new()
             {
-                Errors = [new() { Description = ex.Message}]
+                Errors = [new() { Description = ex.Message }]
             }, string.Empty);
         }
     }

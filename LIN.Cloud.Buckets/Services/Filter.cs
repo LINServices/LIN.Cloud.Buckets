@@ -32,7 +32,7 @@ public class IdentityKeyAttribute(BucketService bucketService, Persistence.Data.
 
             ResponseBase response;
 
-            switch(validate.Response)
+            switch (validate.Response)
             {
                 case Responses.FirewallBlocked:
                     response = new ResponseBase()

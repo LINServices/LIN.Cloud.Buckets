@@ -1,6 +1,3 @@
-using LIN.Cloud.Buckets.Repository.Abstractions;
-using LIN.Cloud.Buckets.Services;
-
 namespace LIN.Cloud.Buckets.Controllers;
 
 [Route("[controller]")]
@@ -54,7 +51,7 @@ public class FileController(IFileRepository fileManager, BucketService bucketSer
         }
 
         // Si se puede marcar publico
-        string key = "";
+        string key = string.Empty;
         if (@public)
         {
             // Obtener la ruta publica.

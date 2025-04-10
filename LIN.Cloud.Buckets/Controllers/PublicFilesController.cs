@@ -1,4 +1,3 @@
-using LIN.Cloud.Buckets.Services;
 using Microsoft.Extensions.Primitives;
 
 namespace LIN.Cloud.Buckets.Controllers;

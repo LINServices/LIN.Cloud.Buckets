@@ -74,7 +74,7 @@ public class BucketData(DataContext context)
 
             if (bucket is null)
                 return new(Responses.NotRows);
-            
+
             return new(Responses.Success, bucket);
         }
         catch

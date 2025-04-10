@@ -40,13 +40,13 @@ public class PublicFilesData(DataContext context)
         try
         {
             var publicFile = await (from b in context.PublicFiles
-                                where b.Key == id
-                                where b.Expires == null || b.Expires > DateTime.UtcNow
-                                select b).FirstOrDefaultAsync();
+                                    where b.Key == id
+                                    where b.Expires == null || b.Expires > DateTime.UtcNow
+                                    select b).FirstOrDefaultAsync();
 
             if (publicFile is null)
                 return new(Responses.NotRows);
-            
+
             return new(Responses.Success, publicFile);
         }
         catch

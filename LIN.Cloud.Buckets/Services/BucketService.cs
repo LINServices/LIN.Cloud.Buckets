@@ -67,7 +67,7 @@ public class BucketService(Persistence.Data.BucketData bucketData, Persistence.D
         // Si no existe la carpeta, la creamos.
         if (!Directory.Exists(filePath))
             Directory.CreateDirectory(filePath);
-        
+
         // Ruta del archivo.
         filePath = System.IO.Path.Combine(filePath, name);
 
@@ -77,7 +77,7 @@ public class BucketService(Persistence.Data.BucketData bucketData, Persistence.D
             return new(Responses.Undefined)
             {
                 Errors = [new ErrorModel() {
-                    Description = $"Ya existe la ruta {filePath}",
+                    Description = $"Ya existe la ruta {System.IO.Path.Combine(path, name)}",
                     Tittle = "Archivo duplicado."
                 }]
             };
