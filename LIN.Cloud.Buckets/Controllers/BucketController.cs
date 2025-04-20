@@ -50,7 +50,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
     /// </summary>
     /// <param name="cloud">Token cloud.</param>
     [HttpGet]
-    public async Task<HttpReadOneResponse<Types.Developer.Projects.BucketProject>> Read([FromHeader] string cloud)
+    public async Task<HttpReadOneResponse<Types.Developer.Resources.BucketResource>> Read([FromHeader] string cloud)
     {
 
         // Validar token.
@@ -67,7 +67,7 @@ public class BucketController(BucketData bucketData) : ControllerBase
         // Obtener el contendor.
         var response = await bucketData.ReadByProject(project);
 
-        return new ReadOneResponse<Types.Developer.Projects.BucketProject>()
+        return new ReadOneResponse<Types.Developer.Resources.BucketResource>()
         {
             Model = new()
             {

@@ -9,6 +9,7 @@ using Http.Extensions;
 using LIN.Access.Developer;
 using LIN.Cloud.Buckets.Persistence.Extensions;
 using LIN.Cloud.Buckets.Repository;
+using LIN.Cloud.Identity.Utilities;
 using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,5 @@ app.MapControllers();
 BucketService.Default = "C:/Data/Cloud";
 
 // Llave de LIN Cloud Developers.
-LIN.Cloud.Identity.Utilities.Build.Init(builder.Configuration["identity:key"] ?? string.Empty);
-
+builder.Services.AddLinCloudOrchestrator(builder.Configuration);
 app.Run();
