@@ -35,6 +35,9 @@ builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<BucketService, BucketService>();
 builder.Services.AddScoped<IdentityKeyAttribute, IdentityKeyAttribute>();
 
+// Llave de LIN Cloud Developers.
+builder.Services.AddLinCloudOrchestrator(builder.Configuration);
+
 // Build.
 var app = builder.Build();
 
@@ -46,6 +49,4 @@ app.MapControllers();
 
 BucketService.Default = "C:/Data/Cloud";
 
-// Llave de LIN Cloud Developers.
-builder.Services.AddLinCloudOrchestrator(builder.Configuration);
 app.Run();
